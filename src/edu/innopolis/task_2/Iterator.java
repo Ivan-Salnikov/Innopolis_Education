@@ -1,7 +1,7 @@
 package edu.innopolis.task_2;
 
-public interface Iterator <E>{
+public interface Iterator <T>{
     boolean hasNext();
-    E next();
+    T next();
 
 }

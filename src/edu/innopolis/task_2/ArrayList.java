@@ -2,38 +2,34 @@ package edu.innopolis.task_2;
 
 import java.util.Arrays;
 
-public class ArrayList<E> implements List<E> {
+public class ArrayList<T> implements List<T> {
     private static final double ARRAY_MAGNIFICATION_FACTOR = 1.5;
+    private static final int DEFAULT_ARRAY_SIZE = 5;
     private int initialArrayLength;
     private int currentArrayLength;
     private int currentArrayIndex;
 
-    private E array[];
+    private T[] array;
 
     public ArrayList(int initialArrayLength) {
         this.initialArrayLength = initialArrayLength;
-        initArrayList();
-    }
-
-    public ArrayList() {
-        this.initialArrayLength = 5;
-        initArrayList();
-    }
-
-    private void initArrayList () {
-        this.array = (E []) new Object[initialArrayLength];
+        this.array = (T []) new Object[initialArrayLength];
         currentArrayLength = initialArrayLength;
         currentArrayIndex = 0;
     }
 
+    public ArrayList() {
+        this(DEFAULT_ARRAY_SIZE);
+    }
+
 
     @Override
-    public void add(E element) {
+    public void add(T element) {
 
         if(currentArrayIndex == currentArrayLength) {
             currentArrayLength *= ARRAY_MAGNIFICATION_FACTOR;
-            E tempArray[] = array.clone();
-            array = (E []) new Object[currentArrayLength];
+            T[] tempArray = array.clone();
+            array = (T []) new Object[currentArrayLength];
             System.arraycopy(tempArray,0, array, 0, tempArray.length);
 
         }
@@ -43,7 +39,7 @@ public class ArrayList<E> implements List<E> {
     }
 
     @Override
-    public E get(int index) {
+    public T get(int index) {
         if(index >= 0 && index < currentArrayLength) {
             return array[index];
         } else {
@@ -52,7 +48,7 @@ public class ArrayList<E> implements List<E> {
         }
     }
 
-    private class LinkedListIterator implements Iterator<E>{
+    private class ArrayListIterator implements Iterator<T>{
         private int currentIteratorIndex = 0;
 
         @Override
@@ -61,7 +57,7 @@ public class ArrayList<E> implements List<E> {
         }
 
         @Override
-        public E next() {
+        public T next() {
             int currentIndex = currentIteratorIndex;
             currentIteratorIndex++;
             return array[currentIndex];
@@ -69,8 +65,8 @@ public class ArrayList<E> implements List<E> {
     }
 
     @Override
-    public Iterator<E> iterator() {
-        return new LinkedListIterator();
+    public Iterator<T> iterator() {
+        return new ArrayListIterator();
     }
 
 
