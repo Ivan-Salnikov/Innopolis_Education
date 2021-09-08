@@ -7,7 +7,7 @@ public class Homework02 {
         System.out.println(TEXT_SEPARATOR);
         System.out.println("");
         System.out.println("Creating ArrayList with String elements and initial array size 10");
-        ArrayList<String> stringArrayList = new ArrayList<>(10);
+        List<String> stringArrayList = new ArrayList<String>(10);
         stringArrayList.add("Some String 1");
         stringArrayList.add("Some String 2");
         stringArrayList.add("Some String 3");
@@ -20,7 +20,7 @@ public class Homework02 {
         System.out.println("");
 
         System.out.println("Creating ArrayList with Integer elements and default initial array size(5)");
-        ArrayList<Integer> intArrayList = new ArrayList<>();
+        List<Integer> intArrayList = new ArrayList<>();
         intArrayList.add(1);
         intArrayList.add(2);
         intArrayList.add(3);
@@ -38,14 +38,14 @@ public class Homework02 {
                 "\nelement of intArrayList with 3 index: " + intArrayList.get(3));
 
         System.out.println("Getting elements with out of bound index: ");
-        System.out.println( intArrayList.get(7));
+        System.out.println(intArrayList.get(7));
 
         System.out.println(TEXT_SEPARATOR);
         System.out.println("");
         System.out.println("Creating Iterator for String ArrayList. " +
                 "\nPrinting all elements of ArrayList by Iterator:");
 
-        Iterator <String> stringIterator = stringArrayList.iterator();
+        Iterator<String> stringIterator = stringArrayList.iterator();
         while (stringIterator.hasNext()) {
             System.out.println(stringIterator.next());
         }
@@ -55,7 +55,7 @@ public class Homework02 {
         System.out.println("Creating Iterator for Integer ArrayList. " +
                 "\nPrinting all elements of ArrayList by Iterator:");
 
-        Iterator <Integer> integerIterator = intArrayList.iterator();
+        Iterator<Integer> integerIterator = intArrayList.iterator();
         while (integerIterator.hasNext()) {
             System.out.println(integerIterator.next());
         }

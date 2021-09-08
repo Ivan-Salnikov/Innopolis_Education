@@ -1,14 +1,21 @@
 package edu.innopolis.task_1;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Channel {
     private String name;
-    private ArrayList<Program> programs;
+    private List<Program> programs;
 
     public Channel(String name) {
         this.name = name;
         programs = new ArrayList<>();
+    }
+
+    public Channel(String name, Program ...programs) {
+        this.name = name;
+        this.programs = Arrays.asList(programs);
     }
 
     public String getName() {
