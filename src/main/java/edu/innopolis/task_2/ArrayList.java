@@ -3,7 +3,7 @@ package edu.innopolis.task_2;
 import java.util.Arrays;
 
 public class ArrayList<T> implements List<T> {
-    private static final double ARRAY_MAGNIFICATION_FACTOR = 1.5;
+    public static final double ARRAY_MAGNIFICATION_FACTOR = 1.5;
     private static final int DEFAULT_ARRAY_SIZE = 5;
     private int initialArrayLength;
 
@@ -13,6 +13,7 @@ public class ArrayList<T> implements List<T> {
     private T[] array;
 
     public ArrayList(int initialArrayLength) {
+        initialArrayLength = initialArrayLength < 5 ? DEFAULT_ARRAY_SIZE : initialArrayLength;
         this.initialArrayLength = initialArrayLength;
         this.array = (T []) new Object[initialArrayLength];
         currentArrayLength = initialArrayLength;
