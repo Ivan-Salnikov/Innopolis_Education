@@ -6,7 +6,6 @@ public class ArrayList<T> implements List<T> {
     public static final double ARRAY_MAGNIFICATION_FACTOR = 1.5;
     private static final int DEFAULT_ARRAY_SIZE = 5;
     private int initialArrayLength;
-
     private int currentArrayLength;
     private int currentArrayIndex;
 
