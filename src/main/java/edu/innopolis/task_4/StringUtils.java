@@ -23,11 +23,11 @@ public class StringUtils {
 
     public void fillStringSequencesMap () {
         char[] strToArray = inputString.toCharArray();
-        for (int i = 0; i < strToArray.length; i++) {
-            if(stringSequencesMap.containsKey(strToArray[i])) {
-                stringSequencesMap.put(strToArray[i], stringSequencesMap.get(strToArray[i])+1);
+        for (Character character : strToArray) {
+            if(stringSequencesMap.containsKey(character)) {
+                stringSequencesMap.put(character, stringSequencesMap.get(character)+1);
             } else {
-                stringSequencesMap.put(strToArray[i], 1);
+                stringSequencesMap.put(character, 1);
             }
         }
     }
