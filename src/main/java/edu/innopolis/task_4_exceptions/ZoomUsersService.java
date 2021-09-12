@@ -14,9 +14,7 @@ public class ZoomUsersService implements UsersService {
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     public static final Pattern VALID_PASSWORD_REGEX =
-            Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).*[A-Za-z0-9]$");
-
-    //(?=\S+$)
+            Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).*[A-Za-z0-9]$");
 
     public static final int MIN_PASSWORD_LENGTH = 7;
 
@@ -30,7 +28,7 @@ public class ZoomUsersService implements UsersService {
 
         if(!isValidEmail(email) || !isValidPassword(password)) return;
 
-        if(isUserExists(email)) {
+        if(!isUserExists(email)) {
             userList.add(new User(email, password));
             System.out.println("User with email " + email + " was registered. Now you can sign in");
         } else {
@@ -41,7 +39,7 @@ public class ZoomUsersService implements UsersService {
     @Override
     public void signIn(String email, String password) {
 
-        if(isUserExists(email)) {
+        if(!isUserExists(email)) {
             throw new UserNotFoundException("User with email " + email + " not registered. Please sign up");
         }
 
@@ -49,22 +47,39 @@ public class ZoomUsersService implements UsersService {
             throw new BadPasswordException("Incorrect password ");
         }
 
+        setSignInState(email);
+
         System.out.println("User with email \"" + email + "\" sign in");
+    }
+
+    private void setSignInState (String email) {
+        userList.stream()
+                .filter((p) -> p.getEmail().contains(email)).findFirst().get().setSignIn(true);
+    }
+
+    public boolean getSignInState(String email) {
+
+        if(!isUserExists(email)) {
+            throw new UserNotFoundException("User with email " + email + " not registered. Please sign up");
+        }
+
+        return userList.stream()
+                .filter((p) -> p.getEmail().contains(email)).findFirst().get().getSignInState();
     }
 
 
     public static boolean isValidEmail (String email) {
-        boolean result;
 
         if(!email.contains("@")) {
             throw new BadEmailException("Incorrect email address");
         }
 
-
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);
-        result = matcher.matches();
+        if(!matcher.matches()) {
+            throw new BadEmailException("Incorrect email address");
+        }
 
-        return result;
+        return true;
     }
 
     public static boolean isValidPassword (String password) {
@@ -85,9 +100,9 @@ public class ZoomUsersService implements UsersService {
     }
 
 
-    private boolean isUserExists (String email) {
+    public boolean isUserExists (String email) {
         return userList.stream()
-                .noneMatch((p) -> p.getEmail().contains(email));
+                .anyMatch((p) -> p.getEmail().contains(email));
     }
 
     private boolean isPasswordCorrect (String email, String password) {

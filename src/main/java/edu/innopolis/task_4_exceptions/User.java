@@ -3,20 +3,20 @@ package edu.innopolis.task_4_exceptions;
 public class User {
     private String  email;
     private  String password;
-    private boolean LoggingIn;
+    private boolean isSignIn;
 
     public User(String email, String password) {
         this.email = email;
         this.password = password;
-        this.LoggingIn = false;
+        this.isSignIn = false;
     }
 
-    public boolean isLoggingIn() {
-        return LoggingIn;
+    public boolean getSignInState() {
+        return isSignIn;
     }
 
-    public void setLoggingIn(boolean loggingIn) {
-        LoggingIn = loggingIn;
+    public void setSignIn(boolean signIn) {
+        isSignIn = signIn;
     }
 
     public String getEmail() {
