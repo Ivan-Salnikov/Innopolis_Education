@@ -8,7 +8,16 @@ public class IdGeneratorFileImpl implements IdGenerator {
     private final String fileName;
 
     public IdGeneratorFileImpl(String fileName) {
+
         this.fileName = fileName;
+        File file = new File(fileName);
+        if(!file.exists() && !file.isDirectory()) {
+            try (PrintWriter printWriter = new PrintWriter(new FileWriter(fileName))) {
+                printWriter.print(0);
+            } catch (IOException e) {
+                throw new IllegalArgumentException(e);
+            }
+        }
     }
 
 

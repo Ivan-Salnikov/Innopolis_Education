@@ -4,8 +4,11 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class UsersRepositoryFileImpl implements UsersRepository {
@@ -56,19 +59,20 @@ public class UsersRepositoryFileImpl implements UsersRepository {
 
     @Override
     public int count() {
-        return 0;
+        try (Stream <String> userStream = Files.newBufferedReader(path).lines();){
+            return  (int) userStream.count();
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
     @Override
     public boolean existsByEmail(String email) {
-
-        try {
-            Stream <String> userStream = Files.newBufferedReader(path).lines();
-            userStream.filter()
+        try (Stream <String> userStream = Files.newBufferedReader(path).lines();){
+            return  userStream.map(l -> l.split("\\|"))
+                    .anyMatch(s -> s[1].equals(email));
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
-
-        return false;
     }
 }
