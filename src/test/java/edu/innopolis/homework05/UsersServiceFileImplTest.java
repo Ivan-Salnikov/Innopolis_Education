@@ -3,41 +3,19 @@ package edu.innopolis.homework05;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Scanner;
+import java.util.StringJoiner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class UsersRepositoryFileImplTest {
+class UsersServiceFileImplTest {
 
     @Test
-    void findByEmail() {
-    }
-
-    @Test
-    void findAll() {
-    }
-
-    @Test
-    void update() {
-    }
-
-    @Test
-    void delete() {
-    }
-
-    @Test
-    void save() {
-    }
-
-    @Test
-    void count() {
-    }
-
-    @Test
-    void givenEmail_whenEmailExists_thenTrue() {
+    void givenEmailAndPassword_whenAllCorrect_thenSignUp() {
         String testMethodName = Thread.currentThread().getStackTrace()[1].getMethodName();
         String usersIdFileName = "test_" + testMethodName + "_users_id.txt";
         String usersRepositoryFileName = "test_" + testMethodName + "_users.txt";
@@ -58,22 +36,10 @@ class UsersRepositoryFileImplTest {
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
-
-
         Assertions.assertTrue(b);
     }
 
     @Test
-    void givenEmail_whenEmailNotExists_thenFalse() {
-        IdGenerator idGenerator = new IdGeneratorFileImpl("users_id.txt");
-        UsersRepository usersRepository = new UsersRepositoryFileImpl("users.txt", idGenerator);
-        UsersService usersService = new UsersServiceFileImpl(usersRepository);
-
-        if(usersRepository.count() == 0) {
-            usersService.signUp("email.1@email.com", "Asdf456");
-        }
-
-        Assertions.assertFalse(usersRepository.existsByEmail("email.not.exists@email.com"));
+    void signIn() {
     }
-
 }

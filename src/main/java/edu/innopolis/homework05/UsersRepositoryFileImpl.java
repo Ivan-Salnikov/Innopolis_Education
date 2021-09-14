@@ -21,6 +21,15 @@ public class UsersRepositoryFileImpl implements UsersRepository {
         this.fileName = fileName;
         this.idGenerator = idGenerator;
         this.path = Paths.get(fileName);
+        if(!Files.exists(path) && !Files.isDirectory(path)) {
+            try {
+                Files.createFile(Paths.get(fileName));
+            } catch (IOException e) {
+                throw new IllegalArgumentException(e);
+            }
+
+        }
+
     }
 
 
@@ -41,6 +50,18 @@ public class UsersRepositoryFileImpl implements UsersRepository {
 
     @Override
     public void delete(User user) {
+        try (Stream <String> userStream = Files.newBufferedReader(path).lines()){
+            List<String> ls;
+
+            ls = userStream.map(l -> l.split("\\|"))
+                    .filter(s -> !s[1].equals(user.getEmail()))
+                    .flatMap(Arrays::stream)
+                    .collect(Collectors.toList());
+            System.out.println(ls);
+
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
 
     }
 
@@ -59,7 +80,7 @@ public class UsersRepositoryFileImpl implements UsersRepository {
 
     @Override
     public int count() {
-        try (Stream <String> userStream = Files.newBufferedReader(path).lines();){
+        try (Stream <String> userStream = Files.newBufferedReader(path).lines()){
             return  (int) userStream.count();
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
@@ -68,11 +89,11 @@ public class UsersRepositoryFileImpl implements UsersRepository {
 
     @Override
     public boolean existsByEmail(String email) {
-        try (Stream <String> userStream = Files.newBufferedReader(path).lines();){
-            return  userStream.map(l -> l.split("\\|"))
-                    .anyMatch(s -> s[1].equals(email));
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e);
+        try (Stream <String> userStream = Files.newBufferedReader(path).lines()){
+        return  userStream.map(l -> l.split("\\|"))
+                .anyMatch(s -> s[1].equals(email));
+    } catch (IOException e) {
+        throw new IllegalArgumentException(e);
         }
     }
 }
