@@ -71,6 +71,6 @@ public class UsersServiceListImpl implements UsersService {
     private boolean isPasswordCorrect (String email, String password) {
         return userList.stream()
                 .filter((p) -> p.getEmail().contains(email))
-                .allMatch((p) -> p.getPassword().contains(password));
+                .allMatch((p) -> p.getPassword().equals(password));
     }
 }
