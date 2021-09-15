@@ -43,13 +43,14 @@ public class UsersRepositoryFileImpl implements UsersRepository {
                     .flatMap(Arrays::stream)
                     .collect(Collectors.toList());
 
-            if(list.size() > 3 ) throw new IllegalArgumentException("Duplicate emails in the repository");
+            if(list.size() > 4 ) throw new IllegalArgumentException("Duplicate emails in the repository");
 
-            if(list.size() < 3 ) return Optional.empty();
+            if(list.size() < 4 ) return Optional.empty();
 
 
             User user = new User(list.get(1), list.get(2));
             user.setId(Integer.parseInt(list.get(0)));
+            user.setSignIn(list.get(3).equals("true"));
             return Optional.of(user);
 
         } catch (IOException e) {
@@ -66,9 +67,10 @@ public class UsersRepositoryFileImpl implements UsersRepository {
             stringList = userStream.map(l -> l.split("\\|"))
                     .flatMap(Arrays::stream)
                     .collect(Collectors.toList());
-            for(int i = 0; i < stringList.size(); i=i+3) {
+            for(int i = 0; i < stringList.size(); i=i+4) {
                 userList.add(new User(stringList.get(i+1), stringList.get(i+2)));
-                userList.get(i/3).setId(Integer.parseInt(stringList.get(i)));
+                userList.get(i/4).setId(Integer.parseInt(stringList.get(i)));
+                userList.get(i/4).setSignIn(stringList.get(3).equals("true"));
             }
 
             return  userList;
@@ -88,7 +90,12 @@ public class UsersRepositoryFileImpl implements UsersRepository {
             throw new IllegalArgumentException(e);
         }
 
-        String userAsLine = user.getId() + "|" + user.getEmail() + "|" + user.getPassword();
+        String userId = stringList.stream()
+                .map(l -> l.split("\\|"))
+                .filter(s -> s[1].equals(user.getEmail()))
+                .findFirst().get()[0];
+
+        String userAsLine = userId  + "|" + user.getEmail() + "|" + user.getPassword()+ "|" + user.getSignInState();
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             for(String stringUser : stringList) {
@@ -109,7 +116,7 @@ public class UsersRepositoryFileImpl implements UsersRepository {
         List<String> stringList;
 
         try (Stream <String> userStream = Files.newBufferedReader(path).lines()){
-            String userAsLine = user.getId() + "|" + user.getEmail() + "|" + user.getPassword();
+            String userAsLine = user.getId() + "|" + user.getEmail() + "|" + user.getPassword()+ "|" + user.getSignInState();
 
             stringList = userStream.filter(p -> !p.equals(userAsLine))
                     .collect(Collectors.toList());
@@ -133,7 +140,7 @@ public class UsersRepositoryFileImpl implements UsersRepository {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
             user.setId(idGenerator.next());
-            String userAsLine = user.getId() + "|" + user.getEmail() + "|" + user.getPassword();
+            String userAsLine = user.getId() + "|" + user.getEmail() + "|" + user.getPassword() + "|" + user.getSignInState();
             writer.write(userAsLine);
             writer.newLine();
         } catch (IOException e) {
@@ -157,6 +164,17 @@ public class UsersRepositoryFileImpl implements UsersRepository {
                 .anyMatch(s -> s[1].equals(email));
     } catch (IOException e) {
         throw new IllegalArgumentException(e);
+        }
+    }
+
+    @Override
+    public boolean isPasswordCorrect(String email, String password) {
+        try (Stream<String> userStream = Files.newBufferedReader(path).lines()){
+            return  userStream.map(l -> l.split("\\|"))
+                    .filter(s -> s[1].equals(email))
+                    .anyMatch(s -> s[2].equals(password));
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
         }
     }
 }

@@ -34,7 +34,6 @@ class UsersRepositoryFileImplTest {
 
         Assertions.assertTrue(user.isPresent());
 
-
         boolean b = (user.get().getEmail().equals("email.3@email.com"));
 
         try {

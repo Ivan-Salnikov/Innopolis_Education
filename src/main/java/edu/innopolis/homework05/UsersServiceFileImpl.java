@@ -1,5 +1,11 @@
 package edu.innopolis.homework05;
 
+import edu.innopolis.homework05.exceptions.BadPasswordException;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.stream.Stream;
+
 public class UsersServiceFileImpl implements UsersService {
     private final UsersRepository usersRepository;
 
@@ -20,6 +26,11 @@ public class UsersServiceFileImpl implements UsersService {
     @Override
     public void signIn(String email, String password) {
 
+        if (usersRepository.isPasswordCorrect(email, password)) {
+            User user = new User(email, password);
+            user.setSignIn(true);
+            usersRepository.update(user);
+        } else throw new BadPasswordException("Incorrect password ");
 
     }
 }

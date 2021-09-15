@@ -17,5 +17,7 @@ public interface UsersRepository {
 
     boolean existsByEmail(String email);
 
+    boolean isPasswordCorrect(String email, String password);
+
 }
 
