@@ -100,10 +100,15 @@ public class UsersRepositoryFileImpl implements UsersRepository {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             for(String stringUser : stringList) {
 
-                writer.write(stringUser.contains(user.getEmail()) ? userAsLine : stringUser);
+                if (stringUser.contains(user.getEmail())) {
+                    writer.write(userAsLine);
+                } else {
+                    writer.write(stringUser);
+                }
+
                 writer.newLine();
             }
-            int i = 0;
+
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }

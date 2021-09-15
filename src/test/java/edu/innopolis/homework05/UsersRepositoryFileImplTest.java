@@ -132,16 +132,14 @@ class UsersRepositoryFileImplTest {
         }
 
         User user = usersRepository.findByEmail("email.4@email.com").get();
-        Integer newID = 10;
         String newPassword = "NEWAsdf456";
 
-        user.setId(newID);
         user.setPassword(newPassword);
         usersRepository.update(user);
 
         user = usersRepository.findByEmail("email.4@email.com").get();
 
-        boolean b = (user.getId().equals(newID)) && (user.getPassword().equals(newPassword));
+        boolean b = user.getPassword().equals(newPassword);
 
         try {
             Files.deleteIfExists(Paths.get(usersIdFileName));
