@@ -17,7 +17,6 @@ public class UsersRepositoryFileImpl implements UsersRepository {
     private final String fileName;
     private final IdGenerator idGenerator;
     private Path path;
-    private List<User> users;
 
     public UsersRepositoryFileImpl(String fileName, IdGenerator idGenerator) {
         this.fileName = fileName;
