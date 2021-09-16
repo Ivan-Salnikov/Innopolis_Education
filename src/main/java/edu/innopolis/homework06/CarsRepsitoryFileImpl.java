@@ -1,5 +1,9 @@
 package edu.innopolis.homework06;
 
+import edu.innopolis.homework05.User;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,7 +19,7 @@ class CarsRepositoryFileImpl implements CarsRepository {
     private final String fileName;
     private Path path;
 
-    private static final Function<String, Car> userMapFunction =
+    private static final Function<String, Car> carMapFunction =
             line -> {
                 String[] fields = line.split("\\[(.*?)\\]");
                 String number = fields[0];
@@ -40,12 +44,22 @@ class CarsRepositoryFileImpl implements CarsRepository {
 
     @Override
     public List<Car> findAll() {
-        try (Stream<String> userStream = Files.newBufferedReader(path).lines()){
-            return userStream.map(userMapFunction).collect(Collectors.toList());
+        try (Stream<String> carStream = Files.newBufferedReader(path).lines()){
+            return carStream.map(carMapFunction).collect(Collectors.toList());
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
     }
 
-
+    @Override
+    public void save(Car car) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
+            String carAsLine = "[" + car.getNumber() + "][" + car.getMark() + "][" + car.getColour() + "]["
+                    + car.getKmAge() + "][" + car.getKmAge() + "][" + car.getPrice() + "]";
+            writer.write(carAsLine);
+            writer.newLine();
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
 }

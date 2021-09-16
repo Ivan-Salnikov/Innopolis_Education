@@ -7,4 +7,6 @@ import java.util.List;
 public interface CarsRepository {
 
     List<Car> findAll();
+
+    void save(Car car);
 }
