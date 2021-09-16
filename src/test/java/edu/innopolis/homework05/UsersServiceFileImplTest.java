@@ -59,7 +59,7 @@ class UsersServiceFileImplTest {
 
         usersService.signIn("email_4@email.com", "Asdfgh4");
 
-        if (usersRepository.findByEmail("email_4@email.com").isEmpty()) fail();
+        if (!usersRepository.findByEmail("email_4@email.com").isPresent()) fail();
 
         boolean b = usersRepository.findByEmail("email_4@email.com").get().getSignInState();
 
