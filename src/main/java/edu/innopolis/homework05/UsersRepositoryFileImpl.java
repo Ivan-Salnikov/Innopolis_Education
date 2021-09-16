@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -16,6 +17,7 @@ public class UsersRepositoryFileImpl implements UsersRepository {
     private final String fileName;
     private final IdGenerator idGenerator;
     private Path path;
+    private List<User> users;
 
     public UsersRepositoryFileImpl(String fileName, IdGenerator idGenerator) {
         this.fileName = fileName;
@@ -37,44 +39,29 @@ public class UsersRepositoryFileImpl implements UsersRepository {
     public Optional<User> findByEmail(String email) {
 
         try (Stream <String> userStream = Files.newBufferedReader(path).lines()){
-
-            List<String> list = userStream.map(l -> l.split("\\|"))
-                    .filter(s -> s[1].equals(email))
-                    .flatMap(Arrays::stream)
-                    .collect(Collectors.toList());
-
-            if(list.size() > 4 ) throw new IllegalArgumentException("Duplicate emails in the repository");
-
-            if(list.size() < 4 ) return Optional.empty();
-
-
-            User user = new User(list.get(1), list.get(2));
-            user.setId(Integer.parseInt(list.get(0)));
-            user.setSignIn(list.get(3).equals("true"));
-            return Optional.of(user);
-
+            return  userStream.map(userMapFunction)
+                    .filter(p -> p.getEmail().equals(email))
+                    .findFirst();
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
     }
 
+    private static final Function<String, User> userMapFunction =
+            line -> {
+                    String[] fields = line.split("\\|");
+                    Integer id = Integer.parseInt(fields[0]);
+                    String email = fields[1];
+                    String password = fields[2];
+                    boolean isSignIn = fields[3].equals("true");
+
+                    return new User(id, email, password, isSignIn);
+                    };
+
     @Override
     public List<User> findAll() {
         try (Stream <String> userStream = Files.newBufferedReader(path).lines()){
-            List<String> stringList;
-            List<User> userList = new ArrayList<>();
-
-            stringList = userStream.map(l -> l.split("\\|"))
-                    .flatMap(Arrays::stream)
-                    .collect(Collectors.toList());
-            for(int i = 0; i < stringList.size(); i=i+4) {
-                userList.add(new User(stringList.get(i+1), stringList.get(i+2)));
-                userList.get(i/4).setId(Integer.parseInt(stringList.get(i)));
-                userList.get(i/4).setSignIn(stringList.get(3).equals("true"));
-            }
-
-            return  userList;
-
+            return userStream.map(userMapFunction).collect(Collectors.toList());
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }

@@ -26,6 +26,13 @@ public class User {
         this.isSignIn = false;
     }
 
+    public User(Integer id, String email, String password, boolean isSignIn) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.isSignIn = isSignIn;
+    }
+
     public boolean getSignInState() {
         return isSignIn;
     }
