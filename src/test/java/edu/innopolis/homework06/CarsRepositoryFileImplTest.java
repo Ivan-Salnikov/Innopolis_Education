@@ -7,41 +7,18 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class CarsRepositoryFileImplTest {
+    private CarsRepository carsRepository;
+    private String carsRepositoryFileName = "test_cars.txt";
 
-
-    @Test
-    void someTest2 () {
-
-        final String regex = "\\[(.*?)\\]";
-        final String string = "[А001АЕ716][Land Cruiser][white][45000][5200000.0]";
-
-        final Pattern pattern = Pattern.compile(regex);
-        final Matcher matcher = pattern.matcher(string);
-
-        String[] fields = new String[5];
-        int i = 0;
-        while (matcher.find()) {
-            fields[i] = matcher.group(1);
-            i++;
-        }
-
-        for(String s : fields) {
-            System.out.println(s);
-        }
-    }
-
-
-    @Test
-    void givenList_whenBlackColourOrKmAge_thenReturnNumber () {
-        String testMethodName = Thread.currentThread().getStackTrace()[1].getMethodName();
-        String carsRepositoryFileName = "test_" + testMethodName + "_cars.txt";
-
-        CarsRepository carsRepository = new CarsRepositoryFileImpl(carsRepositoryFileName);
-
+    @BeforeEach
+    void beforeEach() {
+        carsRepository = new CarsRepositoryFileImpl(carsRepositoryFileName);
         if(carsRepository.findAll().size() == 0) {
             carsRepository.save(new Car("В157МЕ716", "Tiguan", "grey", 105000, 1900000));
             carsRepository.save(new Car("А555МЕ716", "Camry", "black", 205000, 900000));
@@ -55,26 +32,34 @@ class CarsRepositoryFileImplTest {
             carsRepository.save(new Car("С015СО718", "Duster", "black", 35000, 980000));
             carsRepository.save(new Car("В001МЕ716", "Terramont", "yellow", 85000, 2900000));
             carsRepository.save(new Car("А001АЕ716", "Land Cruiser", "white", 45000, 5200000));
-
         }
+    }
 
-        List<Car> carList = carsRepository.findAll();
-
-        System.out.println(carList);
-
-
+    @AfterEach
+    void afterEach(){
         try {
             Files.deleteIfExists(Paths.get(carsRepositoryFileName));
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
+    }
+
+
+    @Test
+    void givenList_whenBlackColourOrKmAge_thenReturnNumber () {
+
+        //    1) Номера всех автомобилей, имеющих черный цвет или нулевой пробег.
+
+        List<Car> carList = carsRepository.findAll();
+
+        System.out.println(carList);
 
         Assertions.assertTrue(true);
 
     }
 
 
-//    1) Номера всех автомобилей, имеющих черный цвет или нулевой пробег.
+
 //    2) Количество уникальных моделей в ценовом диапазоне от 700 до 800 тыс.
 //    3) Вывести цвет автомобиля с минимальной стоимостью.
 //    4) Среднюю стоимость Camry
