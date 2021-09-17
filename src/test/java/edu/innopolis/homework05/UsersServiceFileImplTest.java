@@ -1,6 +1,8 @@
 package edu.innopolis.homework05;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -13,41 +15,42 @@ import java.util.StringJoiner;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UsersServiceFileImplTest {
+    private String usersIdFileName = "test_users_id.txt";
+    private String usersRepositoryFileName = "test_users.txt";
+    private IdGenerator idGenerator;
+    private UsersRepository usersRepository;
+    UsersService usersService;
 
-    @Test
-    void givenEmailAndPassword_whenAllCorrect_thenSignUp() {
-        String testMethodName = Thread.currentThread().getStackTrace()[1].getMethodName();
-        String usersIdFileName = "test_" + testMethodName + "_users_id.txt";
-        String usersRepositoryFileName = "test_" + testMethodName + "_users.txt";
+    @BeforeEach
+    void beforeEach (){
+        idGenerator = new IdGeneratorFileImpl(usersIdFileName);
+        usersRepository = new UsersRepositoryFileImpl(usersRepositoryFileName, idGenerator);
+        usersService = new UsersServiceFileImpl(usersRepository);
+    }
 
-        IdGenerator idGenerator = new IdGeneratorFileImpl(usersIdFileName);
-        UsersRepository usersRepository = new UsersRepositoryFileImpl(usersRepositoryFileName, idGenerator);
-        UsersService usersService = new UsersServiceFileImpl(usersRepository);
-
-        if(usersRepository.count() == 0) {
-            usersService.signUp("email.1@email.com", "Asdf456");
-        }
-
-        boolean b = usersRepository.existsByEmail("email.1@email.com");
-
+    @AfterEach
+    void afterEach(){
         try {
             Files.deleteIfExists(Paths.get(usersIdFileName));
             Files.deleteIfExists(Paths.get(usersRepositoryFileName));
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
+    }
+
+    @Test
+    void givenEmailAndPassword_whenAllCorrect_thenSignUp() {
+
+        if(usersRepository.count() == 0) {
+            usersService.signUp("email.1@email.com", "Asdf456");
+        }
+        boolean b = usersRepository.existsByEmail("email.1@email.com");
+
         Assertions.assertTrue(b);
     }
 
     @Test
     void givenEmailAndPassword_whenUserExistsAndPasswordCorrect_thenSignIn() {
-        String testMethodName = Thread.currentThread().getStackTrace()[1].getMethodName();
-        String usersIdFileName = "test_" + testMethodName + "_users_id.txt";
-        String usersRepositoryFileName = "test_" + testMethodName + "_users.txt";
-
-        IdGenerator idGenerator = new IdGeneratorFileImpl(usersIdFileName);
-        UsersRepository usersRepository = new UsersRepositoryFileImpl(usersRepositoryFileName, idGenerator);
-        UsersService usersService = new UsersServiceFileImpl(usersRepository);
 
         if(usersRepository.count() == 0) {
             usersService.signUp("email_1@email.com", "Asdfgh1");
@@ -63,12 +66,7 @@ class UsersServiceFileImplTest {
 
         boolean b = usersRepository.findByEmail("email_4@email.com").get().getSignInState();
 
-        try {
-            Files.deleteIfExists(Paths.get(usersIdFileName));
-            Files.deleteIfExists(Paths.get(usersRepositoryFileName));
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e);
-        }
+
         Assertions.assertTrue(b);
     }
 }
