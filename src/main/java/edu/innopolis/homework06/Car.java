@@ -36,4 +36,15 @@ public class Car {
     public double getPrice() {
         return price;
     }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "number='" + number + '\'' +
+                ", mark='" + mark + '\'' +
+                ", colour='" + colour + '\'' +
+                ", kmAge=" + kmAge +
+                ", price=" + price +
+                '}';
+    }
 }

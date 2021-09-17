@@ -1,20 +1,42 @@
 package edu.innopolis.homework06;
 
-import edu.innopolis.homework05.*;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 class CarsRepositoryFileImplTest {
 
+
     @Test
-    void givenList_whenBlackColourOrKMAge_thenReturnNumber () {
+    void someTest2 () {
+
+        final String regex = "\\[(.*?)\\]";
+        final String string = "[А001АЕ716][Land Cruiser][white][45000][5200000.0]";
+
+        final Pattern pattern = Pattern.compile(regex);
+        final Matcher matcher = pattern.matcher(string);
+
+        String[] fields = new String[5];
+        int i = 0;
+        while (matcher.find()) {
+            fields[i] = matcher.group(1);
+            i++;
+        }
+
+        for(String s : fields) {
+            System.out.println(s);
+        }
+    }
+
+
+    @Test
+    void givenList_whenBlackColourOrKmAge_thenReturnNumber () {
         String testMethodName = Thread.currentThread().getStackTrace()[1].getMethodName();
         String carsRepositoryFileName = "test_" + testMethodName + "_cars.txt";
 

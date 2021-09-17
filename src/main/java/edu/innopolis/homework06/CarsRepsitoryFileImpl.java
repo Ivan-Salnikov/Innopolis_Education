@@ -12,16 +12,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class CarsRepositoryFileImpl implements CarsRepository {
     private final String fileName;
     private Path path;
+    final String regex = "\\[(.*?)\\]";
+    final Pattern pattern = Pattern.compile(regex);
 
     private static final Function<String, Car> carMapFunction =
             line -> {
                 String[] fields = line.split("\\[(.*?)\\]");
+
                 String number = fields[0];
                 String mark = fields[1];
                 String colour = fields[2];
@@ -45,17 +50,42 @@ class CarsRepositoryFileImpl implements CarsRepository {
     @Override
     public List<Car> findAll() {
         try (Stream<String> carStream = Files.newBufferedReader(path).lines()){
-            return carStream.map(carMapFunction).collect(Collectors.toList());
+            List<Car> lc = carStream.map(line -> {
+                Matcher matcher = pattern.matcher(line);
+                String[] fields = new String[5];
+                int i = 0;
+                while (matcher.find()) {
+                    fields[i] = matcher.group(1);
+                    i++;
+                }
+                String number = fields[0];
+                String mark = fields[1];
+                String colour = fields[2];
+                int kmAge = Integer.parseInt(fields[3]);
+                double price = Double.parseDouble(fields[4]);
+
+                return new Car(number, mark, colour, kmAge, price);
+            })
+            .collect(Collectors.toList());
+
+            return lc;
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
     }
+//    public List<Car> findAll() {
+//        try (Stream<String> carStream = Files.newBufferedReader(path).lines()){
+//            return carStream.map(carMapFunction).collect(Collectors.toList());
+//        } catch (IOException e) {
+//            throw new IllegalArgumentException(e);
+//        }
+//    }
 
     @Override
     public void save(Car car) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
             String carAsLine = "[" + car.getNumber() + "][" + car.getMark() + "][" + car.getColour() + "]["
-                    + car.getKmAge() + "][" + car.getKmAge() + "][" + car.getPrice() + "]";
+                    + car.getKmAge() + "][" + car.getPrice() + "]";
             writer.write(carAsLine);
             writer.newLine();
         } catch (IOException e) {
