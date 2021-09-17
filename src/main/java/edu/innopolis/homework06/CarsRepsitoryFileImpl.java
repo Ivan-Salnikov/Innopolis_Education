@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 
 class CarsRepositoryFileImpl implements CarsRepository {
     private final String fileName;
-    private Path path;
+    private final Path path;
     final static String regex = "\\[(.*?)\\]";
     final static Pattern pattern = Pattern.compile(regex);
 
@@ -44,11 +44,6 @@ class CarsRepositoryFileImpl implements CarsRepository {
     public CarsRepositoryFileImpl(String fileName) {
         this.fileName = fileName;
         this.path = Paths.get(fileName);
-        if(!Files.exists(path) && !Files.isDirectory(path)) try {
-            Files.createFile(Paths.get(fileName));
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e);
-        }
     }
 
 
@@ -63,6 +58,7 @@ class CarsRepositoryFileImpl implements CarsRepository {
 
     @Override
     public void save(Car car) {
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
             String carAsLine = "[" + car.getNumber() + "][" + car.getMark() + "][" + car.getColour() + "]["
                     + car.getKmAge() + "][" + car.getPrice() + "]";
