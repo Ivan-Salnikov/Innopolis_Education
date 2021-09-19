@@ -5,6 +5,7 @@ import java.util.Optional;
 
 public interface UsersRepository {
     Optional<User> findByEmail(String email);
+
     List<User> findAll();
 
     void update(User user);
