@@ -2,11 +2,9 @@ package edu.innopolis.attestation01_reflection;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
@@ -22,6 +20,33 @@ public class AttestationReflection {
     }
 
     public static void cleanUp(Object object, Set<String> fieldsToCleanup, Set<String> fieldsToOutput) {
+
+        //checking is field from fieldClean exists in object
+        Set<String> allFields = new HashSet<>();
+        allFields.addAll(fieldsToCleanup);
+        allFields.addAll(fieldsToOutput);
+
+        if (Map.class.isAssignableFrom(object.getClass())) {
+            for(String field : allFields){
+                try {
+                    if(object.getClass().getDeclaredMethod("get", Object.class).invoke(object, field) == null) {
+                        throw new IllegalArgumentException("Поле \"" + field + "\" не найдено");
+                    }
+                    //System.out.println(object.getClass().getDeclaredMethod("get", Object.class).invoke(object, field));
+                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            }
+            return;
+        }
+
+        for(String field : allFields) {
+            try {
+                object.getClass().getDeclaredField(field);
+            } catch (NoSuchFieldException e) {
+                throw new IllegalArgumentException(e);
+            }
+        }
 
         for(String fieldClean : fieldsToCleanup) {
             try {
