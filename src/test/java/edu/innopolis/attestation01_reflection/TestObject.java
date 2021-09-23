@@ -18,6 +18,54 @@ public class TestObject {
     private char primitiveChar;
     private short primitiveShort;
 
+    public Integer getObjectInteger() {
+        return objectInteger;
+    }
+
+    public ArrayList<String> getObjectArrayList() {
+        return objectArrayList;
+    }
+
+    public Map<String, Integer> getObjectMap() {
+        return objectMap;
+    }
+
+    public String getSomeString() {
+        return someString;
+    }
+
+    public long getPrimitiveLong() {
+        return primitiveLong;
+    }
+
+    public byte getPrimitiveByte() {
+        return primitiveByte;
+    }
+
+    public double getPrimitiveDouble() {
+        return primitiveDouble;
+    }
+
+    public int getPrimitiveInt() {
+        return primitiveInt;
+    }
+
+    public boolean getPrimitiveBoolean() {
+        return primitiveBoolean;
+    }
+
+    public float getPrimitiveFloat() {
+        return primitiveFloat;
+    }
+
+    public char getPrimitiveChar() {
+        return primitiveChar;
+    }
+
+    public short getPrimitiveShort() {
+        return primitiveShort;
+    }
+
     public TestObject(Integer objectInteger, ArrayList<String> objectArrayList, Map<String, Integer> objectMap,
                       String someString, long primitiveLong, byte primitiveByte, double primitiveDouble,
                       int primitiveInt, boolean primitiveBoolean, float primitiveFloat, char primitiveChar,
@@ -35,7 +83,6 @@ public class TestObject {
         this.primitiveChar = primitiveChar;
         this.primitiveShort = primitiveShort;
     }
-
 
 
     @Override
