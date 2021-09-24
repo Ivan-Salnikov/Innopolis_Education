@@ -9,9 +9,7 @@ public class Cleaner {
 
     public static void cleanUp(Object object, Set<String> fieldsToCleanup, Set<String> fieldsToOutput) {
 
-        Set<String> allFields = new HashSet<>();
-        allFields.addAll(fieldsToCleanup);
-        allFields.addAll(fieldsToOutput);
+        Set<String> allFields = ExecutorService.collectFields(fieldsToCleanup, fieldsToOutput);
 
         if (!Map.class.isAssignableFrom(object.getClass())) {
             ExecutorService executorService = new ExecutorServiceObjectImpl();
@@ -25,8 +23,8 @@ public class Cleaner {
             executorService.validateFields(object, allFields);
             executorService.cleanFields(object, fieldsToCleanup);
 
-            //Printer printer = new PrinterObjectImpl();
-            //printer.printFields(object, fieldsToOutput);
+            Printer printer = new PrinterMapImpl();
+            printer.printFields(object, fieldsToOutput);
 
         }
 
