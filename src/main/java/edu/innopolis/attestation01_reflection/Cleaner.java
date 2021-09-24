@@ -4,7 +4,6 @@ import edu.innopolis.attestation01_reflection.services.*;
 
 import java.util.*;
 
-
 public class Cleaner {
 
     public static void cleanUp(Object object, Set<String> fieldsToCleanup, Set<String> fieldsToOutput) {

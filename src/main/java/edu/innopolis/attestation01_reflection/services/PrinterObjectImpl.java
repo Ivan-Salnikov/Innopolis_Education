@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class PrinterObjectImpl implements Printer {
     @Override
-    public void printFields(Object object, Set<String> outputFields) {
+    public <T> void printFields(T object, Set<String> outputFields) {
         ArrayList<String> outputFieldsToString = new ArrayList<>();
 
         for(String fieldOutput : outputFields) {
