@@ -5,9 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class AttestationReflectionTest {
+class CleanerTest {
 
     @Test
     void cleanUp_ObjectNotExtendsMap() {
@@ -48,7 +46,7 @@ class AttestationReflectionTest {
 //        System.out.println("  - список полей для очистки " + fieldsToCleanUp);
 //        System.out.println("  - список полей для вывода значений " + fieldsToOutput);
 
-        AttestationReflection.cleanUp(testObject, fieldsToCleanUp, fieldsToOutput);
+        Cleaner.cleanUp(testObject, fieldsToCleanUp, fieldsToOutput);
 
         Assertions.assertEquals(testObject.getObjectArrayList(), listString);
         Assertions.assertEquals(testObject.getSomeString(), testString);
@@ -80,13 +78,14 @@ class AttestationReflectionTest {
         Set<String> fieldsToCleanUp = new HashSet<>();
         fieldsToCleanUp.add("Marat");
         fieldsToCleanUp.add("Marsel");
+        //fieldsToCleanUp.add("Mistake");  //java.lang.IllegalArgumentException: Поле "Mistake" не найдено
 
         Set<String> fieldsToOutput = new HashSet<>();
         fieldsToOutput.add("Ivan");
         fieldsToOutput.add("Alexandr");
         fieldsToOutput.add("Albert");
 
-        AttestationReflection.cleanUp(mapStringInteger, fieldsToCleanUp, fieldsToOutput);
+        Cleaner.cleanUp(mapStringInteger, fieldsToCleanUp, fieldsToOutput);
 
     }
 }
