@@ -1,0 +1,137 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ExecutorServiceMapImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">edu.innopolis.attestation01_reflection.services</a>
+</div>
+
+<h1>Coverage Summary for Class: ExecutorServiceMapImpl (edu.innopolis.attestation01_reflection.services)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ExecutorServiceMapImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    73,3%
+  </span>
+  <span class="absValue">
+    (11/15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package edu.innopolis.attestation01_reflection.services;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import java.lang.reflect.InvocationTargetException;
+<i class="no-highlight">4</i>&nbsp;import java.util.Set;
+<i class="no-highlight">5</i>&nbsp;
+<b class="fc"><i class="no-highlight">6</i>&nbsp;public class ExecutorServiceMapImpl implements ExecutorService {</b>
+<i class="no-highlight">7</i>&nbsp;    @Override
+<i class="no-highlight">8</i>&nbsp;    public void validateFields(Object object, Set&lt;String&gt; allFields) {
+<b class="fc"><i class="no-highlight">9</i>&nbsp;        for(String field : allFields){</b>
+<i class="no-highlight">10</i>&nbsp;            try {
+<b class="fc"><i class="no-highlight">11</i>&nbsp;                if(object.getClass().getDeclaredMethod(&quot;get&quot;, Object.class).invoke(object, field) == null) {</b>
+<b class="fc"><i class="no-highlight">12</i>&nbsp;                    throw new IllegalArgumentException(&quot;Поле \&quot;&quot; + field + &quot;\&quot; не найдено&quot;);</b>
+<i class="no-highlight">13</i>&nbsp;                }
+<b class="nc"><i class="no-highlight">14</i>&nbsp;            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {</b>
+<b class="nc"><i class="no-highlight">15</i>&nbsp;                throw new IllegalArgumentException(e);</b>
+<b class="fc"><i class="no-highlight">16</i>&nbsp;            }</b>
+<b class="fc"><i class="no-highlight">17</i>&nbsp;        }</b>
+<i class="no-highlight">18</i>&nbsp;    }
+<i class="no-highlight">19</i>&nbsp;
+<i class="no-highlight">20</i>&nbsp;    @Override
+<i class="no-highlight">21</i>&nbsp;    public void cleanFields(Object object, Set&lt;String&gt; cleanFields) {
+<b class="fc"><i class="no-highlight">22</i>&nbsp;        for(String field : cleanFields){</b>
+<i class="no-highlight">23</i>&nbsp;            try {
+<b class="fc"><i class="no-highlight">24</i>&nbsp;                if(object.getClass().getDeclaredMethod(&quot;remove&quot;, Object.class).invoke(object, field) == null) {</b>
+<b class="fc"><i class="no-highlight">25</i>&nbsp;                    throw new IllegalArgumentException(&quot;Поле \&quot;&quot; + field + &quot;\&quot; не найдено&quot;);</b>
+<i class="no-highlight">26</i>&nbsp;                }
+<b class="nc"><i class="no-highlight">27</i>&nbsp;            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {</b>
+<b class="nc"><i class="no-highlight">28</i>&nbsp;                throw new IllegalArgumentException(e);</b>
+<b class="fc"><i class="no-highlight">29</i>&nbsp;            }</b>
+<b class="fc"><i class="no-highlight">30</i>&nbsp;        }</b>
+<i class="no-highlight">31</i>&nbsp;    }
+<i class="no-highlight">32</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-09-24 12:39</div>
+</div>
+</body>
+</html>
